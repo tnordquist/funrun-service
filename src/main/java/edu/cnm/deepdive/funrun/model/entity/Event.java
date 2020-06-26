@@ -48,22 +48,41 @@ public class Event {
     return skillLevel;
   }
 
+  public void setSkillLevel(int skillLevel) {
+    this.skillLevel = skillLevel;
+  }
+
   @NonNull
   public String getDisplayName() {
     return displayName;
+  }
+
+  public void setDisplayName(@NonNull String displayName) {
+    this.displayName = displayName;
   }
 
   public Date getStart() {
     return start;
   }
 
+  public void setStart(Date start) {
+    this.start = start;
+  }
+
   public Date getEnd() {
     return end;
+  }
+
+  public void setEnd(Date end) {
+    this.end = end;
   }
 
   public int getDistance() {
     return distance;
   }
 
+  public void setDistance(int distance) {
+    this.distance = distance;
+  }
 }
 

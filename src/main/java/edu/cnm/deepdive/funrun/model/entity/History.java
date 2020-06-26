@@ -52,14 +52,6 @@ public class History {
   @Column(length = 4096, nullable = false)
   private int distance;
 
-  public void setUser(User user) {
-    this.user = user;
-  }
-
-  public void setEvent(Event event) {
-    this.event = event;
-  }
-
   public Long getId() {
     return id;
   }
@@ -68,20 +60,41 @@ public class History {
     return start;
   }
 
+  public void setStart(Date start) {
+    this.start = start;
+  }
+
   public Date getEnd() {
     return end;
+  }
+
+  public void setEnd(Date end) {
+    this.end = end;
   }
 
   public User getUser() {
     return user;
   }
 
+  public void setUser(User user) {
+    this.user = user;
+  }
+
   public Event getEvent() {
     return event;
   }
 
+  public void setEvent(Event event) {
+    this.event = event;
+  }
+
   public int getDistance() {
     return distance;
+  }
+
+  public void setDistance(int distance) {
+    this.distance = distance;
+
   }
 }
 
