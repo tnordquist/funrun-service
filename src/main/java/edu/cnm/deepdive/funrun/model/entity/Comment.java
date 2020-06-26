@@ -27,6 +27,22 @@ public class Comment {
 
   @ManyToOne(fetch = FetchType.EAGER,
       cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-  @JoinColumn(name = "user_id", nullable = false)
-  private User user;
+  @JoinColumn(name = "author_id", nullable = false)
+  private User author;
+
+  public Long getId() {
+    return id;
+  }
+
+  public History getHistory() {
+    return history;
+  }
+
+  public void setHistory(History history) {
+    this.history = history;
+  }
+
+  public User getAuthor() {
+    return author;
+  }
 }
