@@ -1,10 +1,11 @@
 package edu.cnm.deepdive.funrun.service;
 
+import edu.cnm.deepdive.funrun.model.entity.History;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-public interface History extends JpaRepository<History, Long> {
+public interface HistoryRepository extends JpaRepository<History, Long> {
   Iterable<History> getAllByOrderByNameAsc();
 
   @Query("SELECT * FROM History ORDER BY event")
