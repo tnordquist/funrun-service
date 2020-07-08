@@ -9,6 +9,4 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
   Iterable<Comment> getAllByOrderByNameAsc();
 
-  @Query("SELECT * FROM Comment ORDER BY history")
-  LiveData<List<Comment>> selectAll();
 }

@@ -9,9 +9,5 @@ public interface UserRepository extends JpaRepository <User, Long> {
 
   Iterable<User> getAllByOrderByNameAsc();
 
-  @Query("SELECT * FROM User ORDER BY displayName")
-  LiveData<List<User>> selectAll();
-
-
 }
 

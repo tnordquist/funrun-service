@@ -6,9 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface HistoryRepository extends JpaRepository<History, Long> {
+
   Iterable<History> getAllByOrderByNameAsc();
 
-  @Query("SELECT * FROM History ORDER BY event")
-  LiveData<List<History>> selectAll();
 
 }
