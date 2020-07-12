@@ -1,7 +1,9 @@
 package edu.cnm.deepdive.funrun.model.entity;
 
 
+import java.net.URI;
 import java.util.Date;
+import javax.annotation.PostConstruct;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,11 +11,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.server.EntityLinks;
 import org.springframework.lang.NonNull;
 
 @SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
-public class Event {
+public class Event { // TODO Add implement Flat class.
+
+  private static EntityLinks entityLinks;
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,7 +27,7 @@ public class Event {
   private Long id;
 
   @NonNull
-  @Column(nullable = false, unique = true)
+  @Column(nullable = false)
   private int skillLevel;
 
   @NonNull
@@ -84,5 +90,24 @@ public class Event {
   public void setDistance(int distance) {
     this.distance = distance;
   }
+
+  @PostConstruct
+  private void initHateoas() {
+    //noinspection ResultOfMethodCallIgnored
+    entityLinks.toString();
+  }
+
+  @Autowired
+
+  private void setEntityLinks(
+      @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") EntityLinks entityLinks) {
+    Event.entityLinks = entityLinks;
+  }
+
+  @Override
+  public URI getHref() {
+    return (id != null) ? entityLinks.linkForItemResource(Event.class, id).toUri() : null;
+  }
+
 }
 

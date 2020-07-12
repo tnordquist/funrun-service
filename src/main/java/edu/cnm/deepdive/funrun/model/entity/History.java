@@ -1,7 +1,9 @@
 package edu.cnm.deepdive.funrun.model.entity;
 
 
+import java.net.URI;
 import java.util.Date;
+import javax.annotation.PostConstruct;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,11 +21,15 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Source;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.server.EntityLinks;
 import org.springframework.lang.NonNull;
 
 @SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
-public class History {
+public class History { // TODO Add implement Flat class.
+
+  private static EntityLinks entityLinks;
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -96,5 +102,24 @@ public class History {
     this.distance = distance;
 
   }
+
+  @PostConstruct
+  private void initHateoas() {
+    //noinspection ResultOfMethodCallIgnored
+    entityLinks.toString();
+  }
+
+  @Autowired
+
+  private void setEntityLinks(
+      @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") EntityLinks entityLinks) {
+    History.entityLinks = entityLinks;
+  }
+
+  @Override
+  public URI getHref() {
+    return (id != null) ? entityLinks.linkForItemResource(History.class, id).toUri() : null;
+  }
+
 }
 

@@ -1,6 +1,9 @@
 package edu.cnm.deepdive.funrun.model.entity;
 
 
+import edu.cnm.deepdive.funrun.view.FlatComment;
+import java.net.URI;
+import javax.annotation.PostConstruct;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,10 +13,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.server.EntityLinks;
+import org.springframework.lang.NonNull;
 
 @SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
-public class Comment {
+public class Comment implements FlatComment {
+
+  private static EntityLinks entityLinks;
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,6 +37,19 @@ public class Comment {
       cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
   @JoinColumn(name = "author_id", nullable = false)
   private User author;
+
+  @NonNull
+  @Column(length = 1000, nullable = false)
+  private String text;
+
+  @NonNull
+  public String getText() {
+    return text;
+  }
+
+  public void setText(@NonNull String text) {
+    this.text = text;
+  }
 
   public Long getId() {
     return id;
@@ -49,4 +70,23 @@ public class Comment {
   public void setAuthor(User author) {
     this.author = author;
   }
+
+  @PostConstruct
+  private void initHateoas() {
+    //noinspection ResultOfMethodCallIgnored
+    entityLinks.toString();
+  }
+
+  @Autowired
+
+  private void setEntityLinks(
+      @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") EntityLinks entityLinks) {
+    Comment.entityLinks = entityLinks;
+  }
+
+  @Override
+  public URI getHref() {
+    return (id != null) ? entityLinks.linkForItemResource(Comment.class, id).toUri() : null;
+  }
+
 }

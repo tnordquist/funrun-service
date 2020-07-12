@@ -1,16 +1,22 @@
 package edu.cnm.deepdive.funrun.model.entity;
 
 
+import java.net.URI;
+import javax.annotation.PostConstruct;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.server.EntityLinks;
 import org.springframework.lang.NonNull;
 
 @SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
-public class User {
+public class User { // TODO Add implement Flat class.
+
+  private static EntityLinks entityLinks;
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,7 +32,7 @@ public class User {
   private String oauthKey;
 
   @NonNull
-  @Column(nullable = false, unique = true)
+  @Column(nullable = false)
   private int skillLevel;
 
   public Long getId() {
@@ -58,6 +64,25 @@ public class User {
   public void setSkillLevel(int skillLevel) {
     this.skillLevel = skillLevel;
   }
+
+  @PostConstruct
+  private void initHateoas() {
+    //noinspection ResultOfMethodCallIgnored
+    entityLinks.toString();
+  }
+
+  @Autowired
+
+  private void setEntityLinks(
+      @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") EntityLinks entityLinks) {
+    User.entityLinks = entityLinks;
+  }
+
+  @Override
+  public URI getHref() {
+    return (id != null) ? entityLinks.linkForItemResource(User.class, id).toUri() : null;
+  }
+
 
 
 }

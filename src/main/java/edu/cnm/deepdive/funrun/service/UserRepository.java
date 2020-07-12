@@ -9,5 +9,10 @@ public interface UserRepository extends JpaRepository <User, Long> {
 
   Iterable<User> getAllByOrderByNameAsc();
 
+  Iterable<User> getAllByOrderByDisplayNameAsc();
+
+  Iterable<User>  getAllByOrderBySkillLevelAsc();
+
+
 }
 
