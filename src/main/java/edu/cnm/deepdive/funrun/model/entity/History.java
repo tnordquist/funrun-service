@@ -110,7 +110,6 @@ public class History { // TODO Add implement Flat class.
   }
 
   @Autowired
-
   private void setEntityLinks(
       @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") EntityLinks entityLinks) {
     History.entityLinks = entityLinks;
