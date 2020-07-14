@@ -6,6 +6,7 @@ import edu.cnm.deepdive.funrun.service.CommentRepository;
 import edu.cnm.deepdive.funrun.service.EventRepository;
 import edu.cnm.deepdive.funrun.service.HistoryRepository;
 import edu.cnm.deepdive.funrun.service.UserRepository;
+import edu.cnm.deepdive.funrun.service.UserService;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.ExposesResourceFor;
