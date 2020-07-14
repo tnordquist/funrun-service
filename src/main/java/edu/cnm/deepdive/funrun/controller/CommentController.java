@@ -1,6 +1,7 @@
 package edu.cnm.deepdive.funrun.controller;
 
 import edu.cnm.deepdive.funrun.model.entity.Comment;
+import edu.cnm.deepdive.funrun.model.entity.Event;
 import edu.cnm.deepdive.funrun.model.entity.User;
 import edu.cnm.deepdive.funrun.service.CommentRepository;
 import edu.cnm.deepdive.funrun.service.EventRepository;
@@ -24,22 +25,19 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/myfunrun")
+@RequestMapping("/comments")
 @ExposesResourceFor(Comment.class)
 public class CommentController {
 
-  private final UserRepository userRepository;
-  private final EventRepository eventRepository;
+
   private final HistoryRepository historyRepository;
   private final CommentRepository commentRepository;
 
   @Autowired
-  public CommentController(UserRepository userRepository,
-      EventRepository eventRepository,
+  public CommentController(
       HistoryRepository historyRepository,
       CommentRepository commentRepository) {
-    this.userRepository = userRepository;
-    this.eventRepository = eventRepository;
+
     this.historyRepository = historyRepository;
     this.commentRepository = commentRepository;
   }
@@ -53,14 +51,18 @@ public class CommentController {
       consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Comment> post(@RequestBody Comment comment) {
     commentRepository.save(comment);
-    // return ResponseEntity.created(user.getHref()).body(user);
-    return null; // TODO Add getHref in user entity.
+    return ResponseEntity.created(comment.getHref()).body(comment);
+  }
+
+  @GetMapping(value = "/{id:\\d+}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public Comment get(@PathVariable long id) {
+    return commentRepository.findById(id).orElseThrow(NoSuchElementException::new);
   }
 
   @PutMapping(value = "/{id:\\d+})",
       consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public Comment put(@PathVariable long id, @RequestBody Comment comment) {
-    Comment existingComment = get(comment);
+    Comment existingComment = get(id);
     if (comment.getAuthor() != null) {
       existingComment.setAuthor(comment.getAuthor());
     }
@@ -71,20 +73,19 @@ public class CommentController {
   @DeleteMapping(value = "/{id:\\d+}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void delete(@PathVariable long id) {
-    commentRepository.findById(id)
-/*        .map((source) -> {
-          List<Comment> comment = comment.getComment();
-          quotes.forEach((quote) -> quote.setSource(null));
-          quoteRepository.saveAll(quotes);
-          return source;
+    historyRepository.findById(id)
+        .map((history) -> {
+          List<Comment> comments = history.getComments();
+          comments.forEach((comment) -> comment.setHistory(null));
+          commentRepository.saveAll(comments);
+          return history;
         })
-        .map((source) -> {
-          sourceRepository.delete(source);
-          return source;
+        .map((history) -> {
+          historyRepository.delete(history);
+          return history;
 
         })
         .orElseThrow(NoSuchElementException::new);
   }
-*/
   }
-}
+

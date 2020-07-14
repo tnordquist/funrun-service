@@ -1,15 +1,24 @@
 package edu.cnm.deepdive.funrun.model.entity;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import edu.cnm.deepdive.funrun.view.FlatComment;
 import edu.cnm.deepdive.funrun.view.FlatEvent;
+import edu.cnm.deepdive.funrun.view.FlatHistory;
 import java.net.URI;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +55,17 @@ public class Event implements FlatEvent {
   @NonNull
   @Column(length = 4096, nullable = false)
   private int distance;
+
+
+
+  @OneToMany(                             //given name of the field.JPA annotation
+      fetch = FetchType.LAZY,
+      mappedBy = "event",
+      cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
+  )
+  @OrderBy("start DESC")
+  @JsonSerialize(contentAs = FlatHistory.class)
+  private List<History> histories = new LinkedList<>();
 
   public Long getId() {
     return id;
@@ -90,6 +110,10 @@ public class Event implements FlatEvent {
 
   public void setDistance(int distance) {
     this.distance = distance;
+  }
+
+  public List<History> getHistories() {
+    return histories;
   }
 
   @PostConstruct

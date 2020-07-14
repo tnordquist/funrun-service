@@ -1,11 +1,9 @@
 package edu.cnm.deepdive.funrun.controller;
 
-import edu.cnm.deepdive.funrun.model.entity.Comment;
 import edu.cnm.deepdive.funrun.model.entity.Event;
-import edu.cnm.deepdive.funrun.service.CommentRepository;
+import edu.cnm.deepdive.funrun.model.entity.History;
 import edu.cnm.deepdive.funrun.service.EventRepository;
 import edu.cnm.deepdive.funrun.service.HistoryRepository;
-import edu.cnm.deepdive.funrun.service.UserRepository;
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,43 +22,46 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping ("/myfunrun")
+@RequestMapping("/events")
 @ExposesResourceFor(Event.class)
 public class EventController {
 
-  private final UserRepository userRepository;
+
   private final EventRepository eventRepository;
   private final HistoryRepository historyRepository;
-  private final CommentRepository commentRepository;
+
 
   @Autowired
-  public EventController(UserRepository userRepository,
+  public EventController(
       EventRepository eventRepository,
-      HistoryRepository historyRepository,
-      CommentRepository commentRepository) {
-    this.userRepository = userRepository;
+      HistoryRepository historyRepository) {
+
     this.eventRepository = eventRepository;
     this.historyRepository = historyRepository;
-    this.commentRepository = commentRepository;
+
   }
 
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  public Iterable<Comment> get() {
-    return commentRepository.getAllByOrderByAuthorAsc();
+  public Iterable<Event> get() {
+    return eventRepository.getAllByOrderByNameAsc();
   }
 
   @PostMapping(
       consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Comment> post(@RequestBody Comment comment) {
-    commentRepository.save(comment);
-    // return ResponseEntity.created(user.getHref()).body(user);
-    return null; // TODO Add getHref in user entity.
+  public ResponseEntity<Event> post(@RequestBody Event event) {
+    eventRepository.save(event);
+    return ResponseEntity.created(event.getHref()).body(event);
+  }
+
+  @GetMapping(value = "/{id:\\d+}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public Event get(@PathVariable long id) {
+    return eventRepository.findById(id).orElseThrow(NoSuchElementException::new);
   }
 
   @PutMapping(value = "/{id:\\d+})",
       consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public Event put(@PathVariable long id, @RequestBody Event event) {
-    Event existingEvent = get(event);
+    Event existingEvent = get(id);
     if (event.getDisplayName() != null) {
       existingEvent.setDisplayName(event.getDisplayName());
     }
@@ -72,20 +73,19 @@ public class EventController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void delete(@PathVariable long id) {
     eventRepository.findById(id)
-/*        .map((source) -> {
-          List<Quote> quotes = source.getQuotes();
-          quotes.forEach((quote) -> quote.setSource(null));
-          quoteRepository.saveAll(quotes);
-          return source;
+        .map((event) -> {
+          List<History> histories = event.getHistories();
+          histories.forEach((history) -> history.setEvent(null));
+          historyRepository.saveAll(histories);
+          return event;
         })
-        .map((source) -> {
-          sourceRepository.delete(source);
-          return source;
+        .map((event) -> {
+          eventRepository.delete(event);
+          return event;
 
         })
         .orElseThrow(NoSuchElementException::new);
   }
 
-*/
-  }
 }
+

@@ -1,9 +1,13 @@
 package edu.cnm.deepdive.funrun.model.entity;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import edu.cnm.deepdive.funrun.view.FlatComment;
+import edu.cnm.deepdive.funrun.view.FlatEvent;
 import edu.cnm.deepdive.funrun.view.FlatHistory;
 import java.net.URI;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.persistence.CascadeType;
@@ -17,6 +21,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -59,6 +64,17 @@ public class History implements FlatHistory {
   @NonNull
   @Column(length = 4096, nullable = false)
   private int distance;
+
+  @OneToMany(                             //given name of the field.JPA annotation
+      fetch = FetchType.LAZY,
+      mappedBy = "history",
+      cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
+  )
+  @OrderBy("text ASC")
+  @JsonSerialize(contentAs = FlatComment.class)
+  private List<Comment> comments = new LinkedList<>();
+
+
 
   public Long getId() {
     return id;
@@ -105,6 +121,9 @@ public class History implements FlatHistory {
 
   }
 
+  public List<Comment> getComments() {
+    return comments;
+  }
 
   @PostConstruct
   private void initHateoas() {

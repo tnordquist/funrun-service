@@ -1,7 +1,9 @@
 package edu.cnm.deepdive.funrun.model.entity;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import edu.cnm.deepdive.funrun.view.FlatComment;
+import edu.cnm.deepdive.funrun.view.FlatHistory;
 import java.net.URI;
 import javax.annotation.PostConstruct;
 import javax.persistence.CascadeType;
@@ -30,8 +32,9 @@ public class Comment implements FlatComment {
 
   @ManyToOne(fetch = FetchType.EAGER,
       cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-  @JoinColumn(name = "history_id", nullable = false)
-  private History history;
+  @JoinColumn(name = "history_id")
+  @JsonSerialize(as = FlatHistory.class)
+  private History history;  //this is a field
 
   @ManyToOne(fetch = FetchType.EAGER,
       cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
@@ -41,6 +44,7 @@ public class Comment implements FlatComment {
   @NonNull
   @Column(length = 1000, nullable = false)
   private String text;
+
 
   @NonNull
   public String getText() {
