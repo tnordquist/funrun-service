@@ -1,6 +1,8 @@
 package edu.cnm.deepdive.funrun.model.entity;
 
 
+import edu.cnm.deepdive.funrun.view.FlatHistory;
+import edu.cnm.deepdive.funrun.view.FlatUser;
 import java.net.URI;
 import javax.annotation.PostConstruct;
 import javax.persistence.Column;
@@ -14,7 +16,7 @@ import org.springframework.lang.NonNull;
 
 @SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
-public class User { // TODO Add implement Flat class.
+public class User implements FlatUser {
 
   private static EntityLinks entityLinks;
 
@@ -82,7 +84,4 @@ public class User { // TODO Add implement Flat class.
   public URI getHref() {
     return (id != null) ? entityLinks.linkForItemResource(User.class, id).toUri() : null;
   }
-
-
-
 }

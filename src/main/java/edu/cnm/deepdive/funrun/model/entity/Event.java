@@ -1,6 +1,7 @@
 package edu.cnm.deepdive.funrun.model.entity;
 
 
+import edu.cnm.deepdive.funrun.view.FlatEvent;
 import java.net.URI;
 import java.util.Date;
 import javax.annotation.PostConstruct;
@@ -17,7 +18,7 @@ import org.springframework.lang.NonNull;
 
 @SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
-public class Event { // TODO Add implement Flat class.
+public class Event implements FlatEvent {
 
   private static EntityLinks entityLinks;
 

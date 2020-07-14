@@ -20,11 +20,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/history")
+@RequestMapping("/histories")
 @ExposesResourceFor(History.class)
 public class HistoryController {
 
@@ -55,23 +56,29 @@ public class HistoryController {
     return ResponseEntity.created(history.getHref()).body(history);
   }
 
-/*  @PutMapping(value = "/{id:\\d+}",
-      consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(value = "/{id:\\d+}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public History get(@PathVariable long id) {
+    return historyRepository.findById(id).orElseThrow(NoSuchElementException::new);
+  }
+
+  @PutMapping(value = "/{id:\\d+}",
+      consumes = MediaType.APPLICATION_JSON_VALUE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   public History put(@PathVariable long id, @RequestBody History history) {
-   *//* History existingHistory = get(id);  //it is a history that is in database
+    History existingHistory = get(id);  //it is a history that is in database
     if (history.getStart() != null) {
       existingHistory.setStart(history.getStart()); //Added getStart as a date; not sure need to check with the team
     }
-    return historyRepository.save(existingHistory); *//*//save back to database the modified source
-  }*/
+    return historyRepository.save(existingHistory); //save back to database the modified source
+  }
 
   @DeleteMapping(value = "/{id:\\d+}")
   @ResponseStatus(HttpStatus.NO_CONTENT)  //after delete nothing to be returned
   public void delete(@PathVariable long id) {
     historyRepository.findById(id)
-        /*.map((history) -> {
-          *//*List<History> histories = history.getHistories();
-          histories.forEach((quote) -> quote.setHistory(null));*//*//go to each quotes and set the source to null
+     /*   .map((history) -> {
+          List<History> histories = history.getHistories();
+          histories.forEach((quote) -> quote.setHistory(null));//go to each quotes and set the source to null
           historyRepository.saveAll(histories);
           return history;
         })*/ //TODO Add to HistoryEntity the list of Histories.

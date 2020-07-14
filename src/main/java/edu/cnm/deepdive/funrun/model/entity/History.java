@@ -1,8 +1,10 @@
 package edu.cnm.deepdive.funrun.model.entity;
 
 
+import edu.cnm.deepdive.funrun.view.FlatHistory;
 import java.net.URI;
 import java.util.Date;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -27,7 +29,7 @@ import org.springframework.lang.NonNull;
 
 @SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
-public class History { // TODO Add implement Flat class.
+public class History implements FlatHistory {
 
   private static EntityLinks entityLinks;
 
@@ -102,6 +104,7 @@ public class History { // TODO Add implement Flat class.
     this.distance = distance;
 
   }
+
 
   @PostConstruct
   private void initHateoas() {

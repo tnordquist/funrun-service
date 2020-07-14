@@ -5,17 +5,21 @@ import java.net.URI;
 import java.util.Date;
 import org.springframework.lang.NonNull;
 
-@JsonPropertyOrder({"id", "created", "updated", "name"})
+@JsonPropertyOrder({"id", "skillLevel", "displayName", "start", "end", "distance"})
 public interface FlatEvent {
 
   Long getId();
 
+  int getSkillLevel();
+
   @NonNull
-  String getName();
+  String getDisplayName();
 
-  Date getCreated();
+  Date getStart();
 
-  Date getUpdated();
+  Date getEnd();
+
+  int getDistance();
 
   URI getHref();
 

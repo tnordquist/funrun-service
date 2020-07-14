@@ -1,21 +1,25 @@
 package edu.cnm.deepdive.funrun.view;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import edu.cnm.deepdive.funrun.model.entity.Event;
+import edu.cnm.deepdive.funrun.model.entity.User;
 import java.net.URI;
 import java.util.Date;
-import org.springframework.lang.NonNull;
 
-@JsonPropertyOrder({"id", "created", "updated", "name"})
+@JsonPropertyOrder({"id", "start", "end", "user", "event", "distance"})
 public interface FlatHistory {
 
   Long getId();
 
-  @NonNull
-  String getName();
+  Date getStart();
 
-  Date getCreated();
+  Date getEnd();
 
-  Date getUpdated();
+  User getUser();
+
+  Event getEvent();
+
+  int getDistance();
 
   URI getHref();
 }

@@ -1,17 +1,19 @@
 package edu.cnm.deepdive.funrun.view;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import edu.cnm.deepdive.funrun.model.entity.History;
+import edu.cnm.deepdive.funrun.model.entity.User;
 import java.net.URI;
 import java.util.Date;
 
-@JsonPropertyOrder({"id", "created", "updated", "text"})
+@JsonPropertyOrder({"id", "history", "author", "text"})
 public interface FlatComment {
 
   Long getId();
 
-  Date getCreated();
+  History getHistory();
 
-  Date getUpdated();
+  User getAuthor();
 
   String getText();
 
