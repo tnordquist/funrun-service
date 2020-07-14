@@ -7,17 +7,17 @@ import java.util.Date;
 import org.springframework.lang.NonNull;
 
 
-@JsonPropertyOrder({"id", "created", "updated", "name"})
+@JsonPropertyOrder({"id", "displayName", "oauthKey", "skillLevel"})
 public interface FlatUser {
 
   Long getId();
 
   @NonNull
-  String getName();
+  String getDisplayName();
 
-  Date getCreated();
+  Date getOauthKey();
 
-  Date getUpdated();
+  Date getSkillLevel();
 
   URI getHref();
 }
