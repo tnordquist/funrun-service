@@ -21,6 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * This class contains static methods, with convenience annotations,
+ * which control the race events posted by users. Events may be posted, deleted, and retrieved.
+ */
+
 @RestController
 @RequestMapping("/events")
 @ExposesResourceFor(Event.class)
@@ -30,7 +35,12 @@ public class EventController {
   private final EventRepository eventRepository;
   private final HistoryRepository historyRepository;
 
-
+  /**
+   * Allows comments to be posted, retrieved, updated, and deleted.
+   *
+   * @param eventRepository, historyRepository
+   * @return events.
+   */
   @Autowired
   public EventController(
       EventRepository eventRepository,
@@ -41,11 +51,23 @@ public class EventController {
 
   }
 
+  /**
+   * Allows events to be retrieved.
+   *
+   * @param
+   * @return events ordered by name ascending.
+   */
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public Iterable<Event> get() {
     return eventRepository.getAllByOrderByNameAsc();
   }
 
+  /**
+   * Allows events to be posted.
+   *
+   * @param event
+   * @return new event.
+   */
   @PostMapping(
       consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Event> post(@RequestBody Event event) {
@@ -53,11 +75,23 @@ public class EventController {
     return ResponseEntity.created(event.getHref()).body(event);
   }
 
+  /**
+   * Allows events to be retrieved.
+   *
+   * @param id
+   * @return events findById or throw exception.
+   */
   @GetMapping(value = "/{id:\\d+}", produces = MediaType.APPLICATION_JSON_VALUE)
   public Event get(@PathVariable long id) {
     return eventRepository.findById(id).orElseThrow(NoSuchElementException::new);
   }
 
+  /**
+   * Allows events to be updated.
+   *
+   * @param id, event
+   * @return existing, updated events.
+   */
   @PutMapping(value = "/{id:\\d+})",
       consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public Event put(@PathVariable long id, @RequestBody Event event) {
@@ -68,7 +102,12 @@ public class EventController {
     return eventRepository.save(existingEvent);
 
   }
-
+  /**
+   * Allows events to be deleted.
+   *
+   * @param id, event
+   * @return event or exception.
+   */
   @DeleteMapping(value = "/{id:\\d+}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void delete(@PathVariable long id) {

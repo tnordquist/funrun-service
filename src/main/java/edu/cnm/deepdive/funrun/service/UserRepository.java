@@ -7,8 +7,16 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+/**
+ * This interface holds user information as well as being able to discover interfaces
+ * that extend this one during classpath scanning for easy Spring bean creation.
+ */
 public interface UserRepository extends JpaRepository <User, Long> {
 
+  /**
+   * Implementing this interface allows an object to be the target of the "for-each loop" statement
+   * that extend this one during classpath scanning for easy Spring bean creation.
+   */
   Iterable<User> getAllByOrderByNameAsc();
 
   Iterable<User> getAllByOrderByDisplayNameAsc();

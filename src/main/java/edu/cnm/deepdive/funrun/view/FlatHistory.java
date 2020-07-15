@@ -6,6 +6,10 @@ import edu.cnm.deepdive.funrun.model.entity.User;
 import java.net.URI;
 import java.util.Date;
 
+/**
+ * This interface is non-hierarchical, for many to one relationships with event,
+ * and one to many relationships with comment.
+ */
 @JsonPropertyOrder({"id", "start", "end", "user", "event", "distance"})
 public interface FlatHistory {
 

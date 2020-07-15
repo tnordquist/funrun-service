@@ -25,6 +25,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.EntityLinks;
 import org.springframework.lang.NonNull;
 
+/**
+ * This entity class contains static methods, with convenience annotations,
+ * which provides additional information about event to assist Hibernate in mapping
+ * an entity class field to a table column in a Apache Derby database, and retrieved.
+ */
 @SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
 public class Event implements FlatEvent {
@@ -67,6 +72,12 @@ public class Event implements FlatEvent {
   @JsonSerialize(contentAs = FlatHistory.class)
   private List<History> histories = new LinkedList<>();
 
+  /**
+   * Getters and setters give permission to invoke methods in other classes.
+   *
+   * @param
+   * @return skillLevel, start, end, distance, displayName, id, histories.
+   */
   public Long getId() {
     return id;
   }
@@ -129,6 +140,13 @@ public class Event implements FlatEvent {
     Event.entityLinks = entityLinks;
   }
 
+  /**
+   * URI for linked resource. Href defines a link between the current element
+   * and the destination anchor defined by this attribute
+   *
+   * @param
+   * @return entityLinks if id is not null, or else null
+   */
   @Override
   public URI getHref() {
     return (id != null) ? entityLinks.linkForItemResource(Event.class, id).toUri() : null;

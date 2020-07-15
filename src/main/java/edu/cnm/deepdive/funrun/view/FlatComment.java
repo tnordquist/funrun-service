@@ -6,6 +6,9 @@ import edu.cnm.deepdive.funrun.model.entity.User;
 import java.net.URI;
 import java.util.Date;
 
+/**
+ * This interface is non-hierarchical, for many to one with user and history.
+ */
 @JsonPropertyOrder({"id", "history", "author", "text"})
 public interface FlatComment {
 

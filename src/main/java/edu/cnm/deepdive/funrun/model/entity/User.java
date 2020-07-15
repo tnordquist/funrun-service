@@ -36,6 +36,12 @@ import org.springframework.stereotype.Component;
     allowGetters = true,
     ignoreUnknown = true
 )
+
+/**
+ * This entity class contains static methods, with convenience annotations,
+ * which provides additional information about user to assist Hibernate in mapping
+ * an entity class field to a table column in a Apache Derby database, and retrieved.
+ */
 public class User implements FlatUser {
 
   private static EntityLinks entityLinks;
@@ -75,7 +81,12 @@ public class User implements FlatUser {
   @Column(nullable = false)
   private Role role = Role.USER;
 
-
+  /**
+   * Getters and setters give permission to invoke methods in other classes.
+   *
+   * @param
+   * @return text, id, displayName, role, oauthKey, skillLevel, history, comments.
+   */
   public Long getId() {
     return id;
   }
@@ -137,11 +148,20 @@ public class User implements FlatUser {
     User.entityLinks = entityLinks;
   }
 
+  /**
+   * URI for linked resource. Href defines a link between the current element
+   * and the destination anchor defined by this attribute
+   *
+   * @param
+   * @return entityLinks if id is not null, or else null
+   */
   @Override
   public URI getHref() {
     return (id != null) ? entityLinks.linkForItemResource(User.class, id).toUri() : null;
   }
 
+  /** This class defines user and administrator roles for application.
+   */
   public enum Role {
     USER, ADMINISTRATOR
   }

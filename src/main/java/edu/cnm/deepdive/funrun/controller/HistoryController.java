@@ -23,6 +23,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * This class contains static methods, with convenience annotations,
+ * which control the histories posted by users. Histories may be posted, deleted, and retrieved.
+ */
 @RestController
 @RequestMapping("/histories")
 @ExposesResourceFor(History.class)
@@ -32,7 +36,12 @@ public class HistoryController {
   private final UserRepository userRepository;
   private final CommentRepository commentRepository;
 
-
+  /**
+   * Allows histories to be posted, retrieved, updated, and deleted.
+   *
+   * @param historyRepository, commentRepository, userRepository
+   * @return histories.
+   */
   @Autowired
   public HistoryController(HistoryRepository historyRepository,
       UserRepository userRepository, CommentRepository commentRepository) {
@@ -41,12 +50,23 @@ public class HistoryController {
     this.commentRepository = commentRepository;
 
   }
-
+  /**
+   * Allows histories to be retrieved.
+   *
+   * @param
+   * @return users ordered by name ascending.
+   */
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public Iterable<User> get() {
     return userRepository.getAllByOrderByNameAsc();
   }
 
+  /**
+   * Allows events to be posted.
+   *
+   * @param history
+   * @return new histories
+   */
   @PostMapping(
       consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<History> post(@RequestBody History history) {
@@ -54,11 +74,23 @@ public class HistoryController {
     return ResponseEntity.created(history.getHref()).body(history);
   }
 
+  /**
+   * Allows histories to be retrieved.
+   *
+   * @param id
+   * @return histries findById or throw exception
+   */
   @GetMapping(value = "/{id:\\d+}", produces = MediaType.APPLICATION_JSON_VALUE)
   public History get(@PathVariable long id) {
     return historyRepository.findById(id).orElseThrow(NoSuchElementException::new);
   }
 
+  /**
+   * Allows histories to be updated.
+   *
+   * @param id, history
+   * @return existing, updated histories
+   */
   @PutMapping(value = "/{id:\\d+}",
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
@@ -71,6 +103,12 @@ public class HistoryController {
     return historyRepository.save(existingHistory);
   }
 
+  /**
+   * Allows histories to be deleted.
+   *
+   * @param id
+   * @return history or throw exception
+   */
   @DeleteMapping(value = "/{id:\\d+}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void delete(@PathVariable long id) {

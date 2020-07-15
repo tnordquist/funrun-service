@@ -19,6 +19,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.EntityLinks;
 import org.springframework.lang.NonNull;
 
+/**
+ * This entity class contains static methods, with convenience annotations,
+ * which provides additional information about comments to assist Hibernate in mapping
+ * an entity class field to a table column in a Apache Derby database, and retrieved.
+ */
 @SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
 public class Comment implements FlatComment {
@@ -45,7 +50,12 @@ public class Comment implements FlatComment {
   @Column(length = 1000, nullable = false)
   private String text;
 
-
+  /**
+   * Getters and setters give permission to invoke methods in other classes.
+   *
+   * @param
+   * @return text, id, history, author.
+   */
   @NonNull
   public String getText() {
     return text;
@@ -87,7 +97,13 @@ public class Comment implements FlatComment {
       @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") EntityLinks entityLinks) {
     Comment.entityLinks = entityLinks;
   }
-
+  /**
+   * URI for linked resource. Href defines a link between the current element
+   * and the destination anchor defined by this attribute
+   *
+   * @param
+   * @return entityLinks if id is not null, or else null
+   */
   @Override
   public URI getHref() {
     return (id != null) ? entityLinks.linkForItemResource(Comment.class, id).toUri() : null;

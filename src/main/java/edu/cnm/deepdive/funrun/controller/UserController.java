@@ -28,6 +28,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * This class contains static methods, with convenience annotations,
+ * which indicates that the annotated method (in a Spring Boot controller class)
+ * is able to respond to an HTTP GET request.
+ */
 @RestController
 @RequestMapping("/users")
 @ExposesResourceFor(User.class)
@@ -37,7 +42,12 @@ public class UserController {
   private final HistoryRepository historyRepository;
   private final CommentRepository commentRepository;
 
-
+  /**
+   * Allows users to be updated, retrieved, and deleted.
+   *
+   * @param historyRepository, commentRepository, userRepository
+   * @return user.
+   */
   public UserController(UserRepository userRepository,
       HistoryRepository historyRepository,
       CommentRepository commentRepository) {
@@ -45,17 +55,33 @@ public class UserController {
     this.historyRepository = historyRepository;
     this.commentRepository = commentRepository;
   }
-
+  /**
+   * Retrieves users.
+   *
+   * @param
+   * @return users ordered by name ascending.
+   */
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public Iterable<User> get() {
     return userRepository.getAllByOrderByNameAsc();
   }
 
+  /**
+   * Retrieves comments.
+   *
+   * @param id
+   * @return users findById or throw exception.
+   */
   @GetMapping(value = "/{id:\\d+}", produces = MediaType.APPLICATION_JSON_VALUE)
   public User get(@PathVariable long id) {
     return userRepository.findById(id).orElseThrow(NoSuchElementException::new);
   }
-
+  /**
+   * Updates users.
+   *
+   * @param id, user
+   * @return existing user updated.
+   */
   @PutMapping(value = "/{id:\\d+})",
       consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public User put(@PathVariable long id, @RequestBody User user) {
@@ -68,7 +94,12 @@ public class UserController {
     }
     return userRepository.save(existingUser);
   }
-
+  /**
+   * Deletes users.
+   *
+   * @param id
+   * @return user or throw exception.
+   */
   @DeleteMapping(value = "/{id:\\d+}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void delete(@PathVariable long id) {
