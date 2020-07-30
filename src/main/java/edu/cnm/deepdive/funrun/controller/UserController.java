@@ -132,4 +132,10 @@ public class UserController {
         .orElseThrow(NoSuchElementException::new);
   }
 
+  @GetMapping(value = "/me", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<User> get(Authentication auth) {
+    User user = (auth != null) ? (User) auth.getPrincipal() : null;
+    return ResponseEntity.of(Optional.ofNullable(user));
+  }
+
 }
