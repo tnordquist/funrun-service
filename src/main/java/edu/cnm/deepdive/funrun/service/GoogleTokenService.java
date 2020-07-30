@@ -38,7 +38,7 @@ public class GoogleTokenService implements ResourceServerTokenServices {
   private final AccessTokenConverter converter;
   private final UserService userService;
 
-  @Autowired    //TODO Add the OAuthKey
+  @Autowired
   public GoogleTokenService(@Value("${oauth.clientId}") String clientId,
       UserService userService) {
     this.clientId = clientId;
