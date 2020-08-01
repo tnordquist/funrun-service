@@ -66,14 +66,20 @@ public class User implements FlatUser {
   @OneToMany(                             //given name of the field.JPA annotation
       fetch = FetchType.LAZY,
       mappedBy = "user",
-      cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
+      cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
+      orphanRemoval = true
   )
   @OrderBy("start DESC")
   @JsonSerialize(contentAs = FlatHistory.class)
   private List<History> histories = new LinkedList<>();
 
-  @OneToMany
-  @OrderBy("text ASC")
+  @OneToMany(
+      fetch = FetchType.LAZY,
+      mappedBy = "author",
+      cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
+      orphanRemoval = true
+  )
+  @OrderBy("date DESC")
   @JsonSerialize(contentAs = FlatComment.class)
   private List<Comment> comments = new LinkedList<>();
 

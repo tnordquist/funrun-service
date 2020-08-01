@@ -1,6 +1,8 @@
 package edu.cnm.deepdive.funrun.service;
 
 import edu.cnm.deepdive.funrun.model.entity.Comment;
+import edu.cnm.deepdive.funrun.model.entity.History;
+import edu.cnm.deepdive.funrun.model.entity.User;
 import java.util.Date;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,6 +22,8 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
   Iterable<Comment> getAllByTextContainingOrderByTextAsc(String filter);
 
-  Iterable<Comment> getAllByOrderByAuthorAsc();
+  Iterable<Comment> getAllByHistoryOrderByDateDesc(History history);
+
+  Iterable<Comment> getAllByAuthorOrderByDateDesc(User author);
 
 }

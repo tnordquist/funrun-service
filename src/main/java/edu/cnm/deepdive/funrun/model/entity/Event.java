@@ -66,7 +66,8 @@ public class Event implements FlatEvent {
   @OneToMany(                             //given name of the field.JPA annotation
       fetch = FetchType.LAZY,
       mappedBy = "event",
-      cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
+      cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
+      orphanRemoval = true
   )
   @OrderBy("start DESC")
   @JsonSerialize(contentAs = FlatHistory.class)

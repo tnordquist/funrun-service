@@ -11,6 +11,7 @@ import org.springframework.hateoas.server.ExposesResourceFor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -70,7 +71,7 @@ public class EventController {
    */
   @PostMapping(
       consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Event> post(@RequestBody Event event) {
+  public ResponseEntity<Event> post(@RequestBody Event event, Authentication auth) {
     eventRepository.save(event);
     return ResponseEntity.created(event.getHref()).body(event);
   }
@@ -94,7 +95,7 @@ public class EventController {
    */
   @PutMapping(value = "/{id:\\d+})",
       consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public Event put(@PathVariable long id, @RequestBody Event event) {
+  public Event put(@PathVariable long id, @RequestBody Event event, Authentication auth) {
     Event existingEvent = get(id);
     if (event.getDisplayName() != null) {
       existingEvent.setDisplayName(event.getDisplayName());
@@ -110,20 +111,14 @@ public class EventController {
    */
   @DeleteMapping(value = "/{id:\\d+}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void delete(@PathVariable long id) {
+  public void delete(@PathVariable long id, Authentication auth) {
     eventRepository.findById(id)
         .map((event) -> {
-          List<History> histories = event.getHistories();
-          histories.forEach((history) -> history.setEvent(null));
-          historyRepository.saveAll(histories);
-          return event;
-        })
-        .map((event) -> {
           eventRepository.delete(event);
-          return event;
+          return null;
 
         })
-        .orElseThrow(NoSuchElementException::new);
+        .orElse(null);
   }
 
 }

@@ -57,12 +57,12 @@ public class History implements FlatHistory {
   private Date end;
 
   @ManyToOne(fetch = FetchType.EAGER,
-      cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+      cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
   @JoinColumn(name = "user_id", nullable = false)
   private User user;
 
   @ManyToOne(fetch = FetchType.EAGER,
-      cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+      cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
   @JoinColumn(name = "event_id", nullable = true)
   private Event event;
 
@@ -73,9 +73,10 @@ public class History implements FlatHistory {
   @OneToMany(                             //given name of the field.JPA annotation
       fetch = FetchType.LAZY,
       mappedBy = "history",
-      cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
+      cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
+      orphanRemoval = true
   )
-  @OrderBy("text ASC")
+  @OrderBy("date DESC")
   @JsonSerialize(contentAs = FlatComment.class)
   private List<Comment> comments = new LinkedList<>();
 

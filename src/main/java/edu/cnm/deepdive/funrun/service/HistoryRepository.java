@@ -2,6 +2,7 @@ package edu.cnm.deepdive.funrun.service;
 
 import edu.cnm.deepdive.funrun.model.entity.Event;
 import edu.cnm.deepdive.funrun.model.entity.History;
+import edu.cnm.deepdive.funrun.model.entity.User;
 import java.util.Date;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,13 +18,16 @@ public interface HistoryRepository extends JpaRepository<History, Long> {
    * Implementing this interface allows an object to be the target of the "for-each loop" statement
    * that extend this one during classpath scanning for easy Spring bean creation.
    */
-  Iterable<History> getAllByOrderByNameAsc();
 
-  Iterable<History> getAllByCreatedBetweenOrderByCreatedDesc(Date start, Date end);
+  Iterable<History> getAllByEventAndStartBetween(Event event, Date start, Date end);
 
-  Iterable<History> getAllByOrderByDistanceAsc();
+  Iterable<History> getAllByUserAndStartBetween(User user, Date start, Date end);
 
-  Iterable<History> getAllByEventOrderByTextAsc(Event event);
+  Iterable<History> getAllByUserOrderByDistanceAsc(User user);
+
+  Iterable<History> getAllByEventOrderByStartDescEndDesc(Event event);
+
+  Iterable<History> getAllByUserOrderByStartDescEndDesc(User user);
 
 
 

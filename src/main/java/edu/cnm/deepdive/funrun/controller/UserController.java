@@ -4,11 +4,13 @@ package edu.cnm.deepdive.funrun.controller;
 import edu.cnm.deepdive.funrun.model.entity.Comment;
 import edu.cnm.deepdive.funrun.model.entity.History;
 import edu.cnm.deepdive.funrun.model.entity.User;
+import edu.cnm.deepdive.funrun.model.entity.User.Role;
 import edu.cnm.deepdive.funrun.service.CommentRepository;
 import edu.cnm.deepdive.funrun.service.EventRepository;
 import edu.cnm.deepdive.funrun.service.HistoryRepository;
 import edu.cnm.deepdive.funrun.service.UserRepository;
 import edu.cnm.deepdive.funrun.service.UserService;
+import java.security.AccessControlException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -29,9 +31,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * This class contains static methods, with convenience annotations,
- * which indicates that the annotated method (in a Spring Boot controller class)
- * is able to respond to an HTTP GET request.
+ * This class contains static methods, with convenience annotations, which indicates that the
+ * annotated method (in a Spring Boot controller class) is able to respond to an HTTP GET request.
  */
 @RestController
 @RequestMapping("/users")
@@ -55,6 +56,7 @@ public class UserController {
     this.historyRepository = historyRepository;
     this.commentRepository = commentRepository;
   }
+
   /**
    * Retrieves users.
    *
@@ -76,6 +78,7 @@ public class UserController {
   public User get(@PathVariable long id) {
     return userRepository.findById(id).orElseThrow(NoSuchElementException::new);
   }
+
   /**
    * Updates users.
    *
@@ -84,16 +87,24 @@ public class UserController {
    */
   @PutMapping(value = "/{id:\\d+})",
       consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public User put(@PathVariable long id, @RequestBody User user) {
-    User existingUser = get(id);
-    if (user.getDisplayName() != null) {
-      existingUser.setDisplayName(user.getDisplayName());
+  public User put(@PathVariable long id, @RequestBody User user, Authentication auth) {
+    User current = (User) auth.getPrincipal();
+    if (id != current.getId() && current.getRole() != Role.ADMINISTRATOR) {
+      throw new AccessControlException("");
     }
-    if (user.getSkillLevel() != 0) {
-      existingUser.setSkillLevel(user.getSkillLevel());
-    }
-    return userRepository.save(existingUser);
+    return userRepository.findById(id)
+        .map((existing) -> {
+          if (user.getDisplayName() != null) {
+            existing.setDisplayName(user.getDisplayName());
+          }
+          if (user.getSkillLevel() != 0) {
+            existing.setSkillLevel(user.getSkillLevel());
+          }
+          return userRepository.save(existing);
+        })
+        .orElseThrow(NoSuchElementException::new);
   }
+
   /**
    * Deletes users.
    *
@@ -102,34 +113,19 @@ public class UserController {
    */
   @DeleteMapping(value = "/{id:\\d+}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void delete(@PathVariable long id) {
+  public void delete(@PathVariable long id, Authentication auth) {
+    User current = (User) auth.getPrincipal();
+    if (id != current.getId() && current.getRole() != Role.ADMINISTRATOR) {
+      throw new AccessControlException("");
+    }
     userRepository.findById(id)
         .map((user) -> {
-          List<Comment> comments = user.getComments();
-          comments.forEach((comment) -> comment.setAuthor(null));
-          commentRepository.saveAll(comments);
-          return user;
-        })
-        .map((user) -> {
           userRepository.delete(user);
-          return user;
+          return null;
 
         })
-        .orElseThrow(NoSuchElementException::new);
+        .orElse(null);
 
-    userRepository.findById(id)
-        .map((user) -> {
-          List<History> histories = user.getHistories();
-          histories.forEach((history) -> history.setStart(null));
-          historyRepository.saveAll(histories);
-          return user;
-        })
-        .map((user) -> {
-          userRepository.delete(user);
-          return user;
-
-        })
-        .orElseThrow(NoSuchElementException::new);
   }
 
   @GetMapping(value = "/me", produces = MediaType.APPLICATION_JSON_VALUE)
