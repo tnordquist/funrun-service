@@ -2,12 +2,9 @@ package edu.cnm.deepdive.funrun.controller;
 
 import edu.cnm.deepdive.funrun.model.entity.History;
 import edu.cnm.deepdive.funrun.model.entity.User;
-import edu.cnm.deepdive.funrun.model.entity.User.Role;
 import edu.cnm.deepdive.funrun.service.CommentRepository;
 import edu.cnm.deepdive.funrun.service.HistoryRepository;
-import edu.cnm.deepdive.funrun.service.UserRepository;
 import edu.cnm.deepdive.funrun.service.UserService;
-import java.security.AccessControlException;
 import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.ExposesResourceFor;
@@ -26,8 +23,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * This class contains static methods, with convenience annotations,
- * which control the histories posted by users. Histories may be posted, deleted, and retrieved.
+ * Contains static methods, with convenience annotations, which control the histories posted by
+ * users. Histories may be posted, deleted, and retrieved.
  */
 @RestController
 @RequestMapping("/histories")
@@ -39,11 +36,11 @@ public class HistoryController {
   private final UserService userService;
 
   /**
-   * Allows histories to be posted, retrieved, updated, and deleted.
+   * Creates a new instance of history class.
    *
-   * @param historyRepository, commentRepository, userRepository
+   * @param historyRepository
+   * @param commentRepository
    * @param userService
-   * @return histories.
    */
   @Autowired
   public HistoryController(HistoryRepository historyRepository,
@@ -54,11 +51,12 @@ public class HistoryController {
 
     this.userService = userService;
   }
+
   /**
-   * Allows histories to be retrieved.
+   * Retrieves a collection of histories that can be iterated based on the auth.
    *
-   * @param
-   * @return users ordered by name ascending.
+   * @param auth user's authentication
+   * @return histories by start and end descending based on user.
    */
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public Iterable<History> get(Authentication auth) {
@@ -67,10 +65,11 @@ public class HistoryController {
   }
 
   /**
-   * Allows events to be posted.
+   * Posts history with the corresponding authentication.
    *
-   * @param history
-   * @return new histories
+   * @param history to be posted
+   * @param auth    user's authentication
+   * @return new history
    */
   @PostMapping(
       consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -82,21 +81,26 @@ public class HistoryController {
   }
 
   /**
-   * Allows histories to be retrieved.
+   * Allows histories to be retrieved by Id.
    *
-   * @param id
-   * @return histries findById or throw exception
+   * @param id of history
+   * @return history by Id
+   * @throws NoSuchElementException
    */
   @GetMapping(value = "/{id:\\d+}", produces = MediaType.APPLICATION_JSON_VALUE)
   public History get(@PathVariable long id) {
-    return historyRepository.findById(id).orElseThrow(NoSuchElementException::new);
+    return historyRepository.findById(id)
+        .orElseThrow(NoSuchElementException::new);
   }
 
   /**
-   * Allows histories to be updated.
+   * Allows histories to be modified.
    *
-   * @param id, history
-   * @return existing, updated histories
+   * @param id      of history
+   * @param history to be modified
+   * @param auth    user's authentication
+   * @return existing, modified history
+   * @throws NoSuchElementException
    */
   @PutMapping(value = "/{id:\\d+}",
       consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -117,10 +121,11 @@ public class HistoryController {
 
 
   /**
-   * Allows histories to be deleted.
+   * Allows history to be deleted.
    *
-   * @param id
-   * @return history or throw exception
+   * @param id of history
+   * @return null
+   * @throws .orElse null
    */
   @DeleteMapping(value = "/{id:\\d+}")
   @ResponseStatus(HttpStatus.NO_CONTENT)

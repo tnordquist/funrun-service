@@ -1,20 +1,14 @@
 package edu.cnm.deepdive.funrun.controller;
 
 
-import edu.cnm.deepdive.funrun.model.entity.Comment;
-import edu.cnm.deepdive.funrun.model.entity.History;
 import edu.cnm.deepdive.funrun.model.entity.User;
 import edu.cnm.deepdive.funrun.model.entity.User.Role;
 import edu.cnm.deepdive.funrun.service.CommentRepository;
-import edu.cnm.deepdive.funrun.service.EventRepository;
 import edu.cnm.deepdive.funrun.service.HistoryRepository;
 import edu.cnm.deepdive.funrun.service.UserRepository;
-import edu.cnm.deepdive.funrun.service.UserService;
 import java.security.AccessControlException;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.ExposesResourceFor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,7 +17,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,8 +24,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * This class contains static methods, with convenience annotations, which indicates that the
- * annotated method (in a Spring Boot controller class) is able to respond to an HTTP GET request.
+ * Contains static methods, with convenience annotations, which indicates that the annotated Spring
+ * Boot controller class is able to respond to an HTTP request.
  */
 @RestController
 @RequestMapping("/users")
@@ -44,10 +37,11 @@ public class UserController {
   private final CommentRepository commentRepository;
 
   /**
-   * Allows users to be updated, retrieved, and deleted.
+   * Creates a new instance of user class.
    *
-   * @param historyRepository, commentRepository, userRepository
-   * @return user.
+   * @param historyRepository
+   * @param commentRepository,
+   * @param userRepository
    */
   public UserController(UserRepository userRepository,
       HistoryRepository historyRepository,
@@ -58,9 +52,8 @@ public class UserController {
   }
 
   /**
-   * Retrieves users.
+   * Retrieves users ordered by nameAsc
    *
-   * @param
    * @return users ordered by name ascending.
    */
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -69,21 +62,26 @@ public class UserController {
   }
 
   /**
-   * Retrieves comments.
+   * Retrieves users by id.
    *
-   * @param id
-   * @return users findById or throw exception.
+   * @param id of user
+   * @return users by id
+   * @throws NoSuchElementException
    */
   @GetMapping(value = "/{id:\\d+}", produces = MediaType.APPLICATION_JSON_VALUE)
   public User get(@PathVariable long id) {
-    return userRepository.findById(id).orElseThrow(NoSuchElementException::new);
+    return userRepository.findById(id)
+        .orElseThrow(NoSuchElementException::new);
   }
 
   /**
-   * Updates users.
+   * Updates user based on id and authentication.
    *
-   * @param id, user
-   * @return existing user updated.
+   * @param id   for user
+   * @param user to be updated
+   * @param auth user's authentication
+   * @return existing updated user
+   * @throws NoSuchElementException
    */
   @PutMapping(value = "/{id:\\d+})",
       consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -106,10 +104,12 @@ public class UserController {
   }
 
   /**
-   * Deletes users.
+   * Deletes user based id and authentication.
    *
-   * @param id
-   * @return user or throw exception.
+   * @param id   for user
+   * @param auth user's authentication
+   * @return null
+   * @throws .orElse null
    */
   @DeleteMapping(value = "/{id:\\d+}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -128,6 +128,12 @@ public class UserController {
 
   }
 
+  /**
+   * Retrieves users authentication
+   *
+   * @param auth for user
+   * @return user's auth.
+   */
   @GetMapping(value = "/me", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<User> get(Authentication auth) {
     User user = (auth != null) ? (User) auth.getPrincipal() : null;

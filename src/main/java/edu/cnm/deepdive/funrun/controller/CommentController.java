@@ -6,7 +6,6 @@ import edu.cnm.deepdive.funrun.model.entity.User;
 import edu.cnm.deepdive.funrun.service.CommentRepository;
 import edu.cnm.deepdive.funrun.service.HistoryRepository;
 import edu.cnm.deepdive.funrun.service.UserService;
-import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.ExposesResourceFor;
@@ -25,10 +24,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * This class contains static methods, with convenience annotations, which indicates that the
- * annotated method (in a Spring Boot controller class) is able to respond to an HTTP GET request.
+ * Indicates that Spring Boot controller class Comment is able to respond to
+ * HTTP requests.
  */
-
 @RestController
 @RequestMapping("/histories/{historyId:\\d+}/comments")
 @ExposesResourceFor(Comment.class)
@@ -39,11 +37,11 @@ public class CommentController {
   private final UserService userService;
 
   /**
-   * Allows comments to be posted, retrieved, updated, and deleted.
+   * Creates a new instance of comment class.
    *
-   * @param historyRepository, commentRepository
+   * @param historyRepository
    * @param userService
-   * @return comments.
+   * @param commentRepository
    */
   @Autowired
   public CommentController(
@@ -56,10 +54,11 @@ public class CommentController {
   }
 
   /**
-   * Retrieves comments.
+   * Retrieves a collection of comments that can be iterated based on the HistoryId.
    *
-   * @param
-   * @return comments ordered by author.
+   * @param historyId for the retrieved comment.
+   * @return comments based on historyId || an exception as NoSuchElementException.
+   * @throws NoSuchElementException when the comment with that historyId is not found.
    */
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public Iterable<Comment> get(@PathVariable long historyId) {
@@ -69,10 +68,13 @@ public class CommentController {
   }
 
   /**
-   * Posts comments.
+   * Posts comments with the corresponding historyId and authentication.
    *
-   * @param comment
-   * @return comments.
+   * @param comment   posted on the server
+   * @param historyId for posted comment
+   * @param auth      for the user that adds the comment
+   * @return saved comment with its Author and historyId
+   * @throws NoSuchElementException when the comment with that historyId is not found.
    */
   @PostMapping(
       consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -90,10 +92,12 @@ public class CommentController {
   }
 
   /**
-   * Gets comments.
+   * Retrieves comments based on historyId and their Id.
    *
-   * @param id
+   * @param id        that comments have
+   * @param historyId the Id that history has
    * @return find by id or else throw exception.
+   * @throws NoSuchElementException when the comment with that historyId || that id is not found.
    */
   @GetMapping(value = "/{id:\\d+}", produces = MediaType.APPLICATION_JSON_VALUE)
   public Comment get(@PathVariable long historyId, @PathVariable long id) {
@@ -103,10 +107,14 @@ public class CommentController {
   }
 
   /**
-   * Allows comments to be posted, retrieved, and deleted.
+   * Allows comments to be modified.
    *
-   * @param id, comment
-   * @return existingComment.
+   * @param historyId history's id
+   * @param id        comment's id
+   * @param comment   text of the actual comments
+   * @param auth      user's authentication
+   * @return existing comment after it was modified
+   * @throws NoSuchElementException when the comment is not found.
    */
   @PutMapping(value = "/{id:\\d+})",
       consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -125,10 +133,13 @@ public class CommentController {
   }
 
   /**
-   * Deletes comments.
+   * Deletes the comment.
    *
-   * @param id
-   * @return history or else throw exception.
+   * @param historyId history's id
+   * @param id        comment's id
+   * @param auth      user's authentication
+   * @return null
+   * @throws .orElse null
    */
   @DeleteMapping(value = "/{id:\\d+}")
   @ResponseStatus(HttpStatus.NO_CONTENT)

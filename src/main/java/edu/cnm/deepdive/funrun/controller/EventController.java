@@ -1,10 +1,8 @@
 package edu.cnm.deepdive.funrun.controller;
 
 import edu.cnm.deepdive.funrun.model.entity.Event;
-import edu.cnm.deepdive.funrun.model.entity.History;
 import edu.cnm.deepdive.funrun.service.EventRepository;
 import edu.cnm.deepdive.funrun.service.HistoryRepository;
-import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.ExposesResourceFor;
@@ -23,10 +21,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * This class contains static methods, with convenience annotations,
- * which control the race events posted by users. Events may be posted, deleted, and retrieved.
+ * Indicates that Spring Boot controller class Event is able to respond to HTTP requests.
  */
-
 @RestController
 @RequestMapping("/events")
 @ExposesResourceFor(Event.class)
@@ -37,10 +33,10 @@ public class EventController {
   private final HistoryRepository historyRepository;
 
   /**
-   * Allows comments to be posted, retrieved, updated, and deleted.
+   * Creates a new instance of event class.
    *
-   * @param eventRepository, historyRepository
-   * @return events.
+   * @param eventRepository
+   * @param historyRepository
    */
   @Autowired
   public EventController(
@@ -53,10 +49,9 @@ public class EventController {
   }
 
   /**
-   * Allows events to be retrieved.
+   * Retrieves a collection of events that can be iterated based on name.
    *
-   * @param
-   * @return events ordered by name ascending.
+   * @return all events ordered by name ascending.
    */
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public Iterable<Event> get() {
@@ -64,10 +59,11 @@ public class EventController {
   }
 
   /**
-   * Allows events to be posted.
+   * Posts events with the corresponding authentication.
    *
-   * @param event
-   * @return new event.
+   * @param event that is posted
+   * @param auth  for the user that add the event
+   * @return the new event.
    */
   @PostMapping(
       consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -77,21 +73,25 @@ public class EventController {
   }
 
   /**
-   * Allows events to be retrieved.
+   * Retrieves events by their id.
    *
-   * @param id
-   * @return events findById or throw exception.
+   * @param id that an event has
+   * @return events findById
+   * @throws NoSuchElementException
    */
   @GetMapping(value = "/{id:\\d+}", produces = MediaType.APPLICATION_JSON_VALUE)
   public Event get(@PathVariable long id) {
-    return eventRepository.findById(id).orElseThrow(NoSuchElementException::new);
+    return eventRepository.findById(id)
+        .orElseThrow(NoSuchElementException::new);
   }
 
   /**
    * Allows events to be updated.
    *
-   * @param id, event
-   * @return existing, updated events.
+   * @param id    for the event to be updated
+   * @param event that is updated
+   * @param auth  user's authentication
+   * @return existing, updated event
    */
   @PutMapping(value = "/{id:\\d+})",
       consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -103,11 +103,14 @@ public class EventController {
     return eventRepository.save(existingEvent);
 
   }
+
   /**
    * Allows events to be deleted.
    *
-   * @param id, event
-   * @return event or exception.
+   * @param id   for the event to be deleted
+   * @param auth user's authentication
+   * @return null
+   * @throws .orElse null
    */
   @DeleteMapping(value = "/{id:\\d+}")
   @ResponseStatus(HttpStatus.NO_CONTENT)

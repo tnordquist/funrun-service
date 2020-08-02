@@ -24,7 +24,7 @@ import org.springframework.hateoas.server.EntityLinks;
 import org.springframework.lang.NonNull;
 
 /**
- * This entity class contains static methods, with convenience annotations,
+ * Contains static methods, with convenience annotations,
  * which provides additional information about comments to assist Hibernate in mapping
  * an entity class field to a table column in a Apache Derby database, and retrieved.
  */

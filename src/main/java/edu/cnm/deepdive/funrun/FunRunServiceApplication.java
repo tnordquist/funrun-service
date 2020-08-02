@@ -14,9 +14,9 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 
 /**
- * This class provides a framework for managing a JavaFX.
+ * Provides a framework for managing JavaFX and activates when the application is starting,
+ * before any other application objects have been created.
  */
-
 @SpringBootApplication
 @EnableWebSecurity
 @EnableResourceServer
@@ -27,7 +27,8 @@ public class FunRunServiceApplication extends ResourceServerConfigurerAdapter {
   private String clientId;
 
   /**
-   * The class invokes this method in order to run.
+   * Invokes method in order to run.
+   * @param args arguments passed at command line
    */
   public static void main(String[] args) {
     SpringApplication.run(FunRunServiceApplication.class, args);
