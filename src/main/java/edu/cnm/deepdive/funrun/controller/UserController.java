@@ -58,7 +58,7 @@ public class UserController {
    */
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public Iterable<User> get() {
-    return userRepository.getAllByOrderByNameAsc();
+    return userRepository.getAllByOrderByDisplayNameAsc();
   }
 
   /**

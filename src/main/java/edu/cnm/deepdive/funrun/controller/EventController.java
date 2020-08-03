@@ -55,7 +55,7 @@ public class EventController {
    */
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public Iterable<Event> get() {
-    return eventRepository.getAllByOrderByNameAsc();
+    return eventRepository.getAllByOrderByDisplayNameAsc();
   }
 
   /**

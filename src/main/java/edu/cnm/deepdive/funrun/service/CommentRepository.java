@@ -16,7 +16,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
    * Implements this interface allows an object to be the target of the "for-each loop" statement
    * that extend this one during classpath scanning for easy Spring bean creation.
    */
-  Iterable<Comment> getAllByCreatedBetweenOrderByCreatedAsc(Date start, Date end);
+  Iterable<Comment> getAllByDateBetweenOrderByDateAsc(Date start, Date end);
 
   Iterable<Comment> getAllByTextContainingOrderByTextAsc(String filter);
 

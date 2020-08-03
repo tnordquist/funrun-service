@@ -15,8 +15,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
    * Allows an object to be the target of the "for-each loop" statement that extend this one during
    * classpath scanning for easy Spring bean creation.
    */
-  Iterable<User> getAllByOrderByNameAsc();
-
   Iterable<User> getAllByOrderByDisplayNameAsc();
 
   Iterable<User> getAllByOrderBySkillLevelAsc();
