@@ -19,9 +19,9 @@ public interface FlatHistory {
 
   Date getEnd();
 
-  User getUser();
+  //User getUser();
 
-  Event getEvent();
+ // Event getEvent();
 
   int getDistance();
 

@@ -22,6 +22,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.EntityLinks;
 import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Component;
 
 /**
  * Contains static methods, with convenience annotations, which provides additional information
@@ -30,6 +31,7 @@ import org.springframework.lang.NonNull;
  */
 @SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
+@Component
 public class Comment implements FlatComment {
 
   private static EntityLinks entityLinks;

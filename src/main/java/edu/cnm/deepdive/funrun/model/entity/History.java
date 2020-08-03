@@ -4,6 +4,7 @@ package edu.cnm.deepdive.funrun.model.entity;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import edu.cnm.deepdive.funrun.view.FlatComment;
 import edu.cnm.deepdive.funrun.view.FlatHistory;
+import edu.cnm.deepdive.funrun.view.FlatUser;
 import java.net.URI;
 import java.util.Date;
 import java.util.LinkedList;
@@ -25,6 +26,7 @@ import javax.persistence.TemporalType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.EntityLinks;
 import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Component;
 
 /**
  * Contains static methods, with convenience annotations, which provides additional information
@@ -33,6 +35,7 @@ import org.springframework.lang.NonNull;
  */
 @SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
+@Component
 public class History implements FlatHistory {
 
   private static EntityLinks entityLinks;
@@ -43,16 +46,17 @@ public class History implements FlatHistory {
   private Long id;
 
   @Temporal(TemporalType.TIMESTAMP)
-  @Column(nullable = false, updatable = false)
+  @Column(name = "start_of_run", nullable = false, updatable = false)
   private Date start;
 
   @Temporal(TemporalType.TIMESTAMP)
-  @Column(nullable = false)
+  @Column(name = "end_of_run", nullable = false)
   private Date end;
 
   @ManyToOne(fetch = FetchType.EAGER,
       cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
   @JoinColumn(name = "user_id", nullable = false)
+  @JsonSerialize(as = FlatUser.class)
   private User user;
 
   @ManyToOne(fetch = FetchType.EAGER,
@@ -67,7 +71,7 @@ public class History implements FlatHistory {
   @OneToMany(                             //given name of the field.JPA annotation
       fetch = FetchType.LAZY,
       mappedBy = "history",
-      cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
+      cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE},
       orphanRemoval = true
   )
   @OrderBy("date DESC")

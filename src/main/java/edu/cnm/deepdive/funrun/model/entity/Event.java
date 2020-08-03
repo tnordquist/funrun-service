@@ -23,6 +23,7 @@ import javax.persistence.TemporalType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.EntityLinks;
 import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Component;
 
 /**
  * Contains static methods, with convenience annotations, which provides additional information
@@ -31,6 +32,7 @@ import org.springframework.lang.NonNull;
  */
 @SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
+@Component
 public class Event implements FlatEvent {
 
   private static EntityLinks entityLinks;
@@ -49,11 +51,11 @@ public class Event implements FlatEvent {
   private String displayName;
 
   @Temporal(TemporalType.TIMESTAMP)
-  @Column(nullable = true, updatable = false)
+  @Column(name = "start_of_event", nullable = true, updatable = false)
   private Date start;
 
   @Temporal(TemporalType.TIMESTAMP)
-  @Column(nullable = true)
+  @Column(name = "end_of_event", nullable = true)
   private Date end;
 
   @NonNull
@@ -174,7 +176,6 @@ public class Event implements FlatEvent {
   }
 
   @Autowired
-
   private void setEntityLinks(
       @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") EntityLinks entityLinks) {
     Event.entityLinks = entityLinks;

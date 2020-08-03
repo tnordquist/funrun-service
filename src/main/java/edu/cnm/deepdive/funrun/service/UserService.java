@@ -54,6 +54,10 @@ public class UserService {
     return userRepository.findById(id);
   }
 
+  public Optional<User> get(Authentication auth) {
+    return Optional.ofNullable((User) auth.getPrincipal());
+  }
+
   /**
    * Returns an exception if the user doesn't provide a valid id and is not the Administrator.
    *

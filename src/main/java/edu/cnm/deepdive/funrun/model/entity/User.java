@@ -1,6 +1,7 @@
 package edu.cnm.deepdive.funrun.model.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import edu.cnm.deepdive.funrun.view.FlatComment;
@@ -27,6 +28,11 @@ import org.springframework.hateoas.server.EntityLinks;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
+/**
+ * Contains static methods, with convenience annotations,
+ * which provides additional information about user to assist Hibernate in mapping
+ * an entity class field to a table column in a Apache Derby database, and retrieved.
+ */
 @SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
 @Table(name = "user_profile")
@@ -36,12 +42,6 @@ import org.springframework.stereotype.Component;
     allowGetters = true,
     ignoreUnknown = true
 )
-
-/**
- * Contains static methods, with convenience annotations,
- * which provides additional information about user to assist Hibernate in mapping
- * an entity class field to a table column in a Apache Derby database, and retrieved.
- */
 public class User implements FlatUser {
 
   private static EntityLinks entityLinks;
@@ -57,6 +57,7 @@ public class User implements FlatUser {
 
   @NonNull
   @Column(length = 100, nullable = false, unique = true)
+  @JsonIgnore
   private String oauthKey;
 
   @NonNull
@@ -64,9 +65,9 @@ public class User implements FlatUser {
   private int skillLevel;
 
   @OneToMany(                             //given name of the field.JPA annotation
-      fetch = FetchType.LAZY,
+      fetch = FetchType.EAGER,
       mappedBy = "user",
-      cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
+      cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE},
       orphanRemoval = true
   )
   @OrderBy("start DESC")
@@ -74,9 +75,9 @@ public class User implements FlatUser {
   private List<History> histories = new LinkedList<>();
 
   @OneToMany(
-      fetch = FetchType.LAZY,
+      fetch = FetchType.EAGER,
       mappedBy = "author",
-      cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
+      cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE},
       orphanRemoval = true
   )
   @OrderBy("date DESC")
