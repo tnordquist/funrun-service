@@ -2,7 +2,6 @@ package edu.cnm.deepdive.funrun.model.entity;
 
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import edu.cnm.deepdive.funrun.view.FlatComment;
 import edu.cnm.deepdive.funrun.view.FlatEvent;
 import edu.cnm.deepdive.funrun.view.FlatHistory;
 import java.net.URI;
@@ -26,9 +25,9 @@ import org.springframework.hateoas.server.EntityLinks;
 import org.springframework.lang.NonNull;
 
 /**
- * This entity class contains static methods, with convenience annotations,
- * which provides additional information about event to assist Hibernate in mapping
- * an entity class field to a table column in a Apache Derby database, and retrieved.
+ * Contains static methods, with convenience annotations, which provides additional information
+ * about event to assist Hibernate in mapping an entity class field to a table column in a Apache
+ * Derby database, and retrieved.
  */
 @SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
@@ -62,8 +61,7 @@ public class Event implements FlatEvent {
   private int distance;
 
 
-
-  @OneToMany(                             //given name of the field.JPA annotation
+  @OneToMany(
       fetch = FetchType.LAZY,
       mappedBy = "event",
       cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
@@ -73,57 +71,98 @@ public class Event implements FlatEvent {
   @JsonSerialize(contentAs = FlatHistory.class)
   private List<History> histories = new LinkedList<>();
 
+
   /**
-   * Getters and setters give permission to invoke methods in other classes.
+   * Returns event's id
    *
-   * @param
-   * @return skillLevel, start, end, distance, displayName, id, histories.
+   * @return a long containing the value for Id.
    */
   public Long getId() {
     return id;
   }
 
+
   public int getSkillLevel() {
     return skillLevel;
   }
 
+  /**
+   * Sets the event's skill level.
+   */
   public void setSkillLevel(int skillLevel) {
     this.skillLevel = skillLevel;
   }
 
+  /**
+   * Retrieves the display name for the user in the specific event.
+   *
+   * @return display name as a String.
+   */
   @NonNull
   public String getDisplayName() {
     return displayName;
   }
 
+  /**
+   * Sets the display name for the user in the specific event.
+   */
   public void setDisplayName(@NonNull String displayName) {
     this.displayName = displayName;
   }
 
+  /**
+   * Retrieves event's start date.
+   *
+   * @return a start date of the event.
+   */
   public Date getStart() {
     return start;
   }
 
+  /**
+   * Sets the event's start date.
+   */
   public void setStart(Date start) {
     this.start = start;
   }
 
+  /**
+   * Returns event's end date.
+   *
+   * @return the end date for event.
+   */
   public Date getEnd() {
     return end;
   }
 
+  /**
+   * Sets the event's end date.
+   */
   public void setEnd(Date end) {
     this.end = end;
   }
 
+  /**
+   * Returns the distance for specific event.
+   *
+   * @return distance as an int value.
+   */
   public int getDistance() {
     return distance;
   }
 
+  /**
+   * Sets the distance in the specific event.
+   */
   public void setDistance(int distance) {
     this.distance = distance;
   }
 
+  /**
+   * Retrieves a list of histories for specific event.
+   *
+   * @return histories
+   */
   public List<History> getHistories() {
     return histories;
   }
@@ -142,10 +181,9 @@ public class Event implements FlatEvent {
   }
 
   /**
-   * URI for linked resource. Href defines a link between the current element
-   * and the destination anchor defined by this attribute
+   * Defines a link between the current element and the destination anchor defined by this
+   * attribute.
    *
-   * @param
    * @return entityLinks if id is not null, or else null
    */
   @Override

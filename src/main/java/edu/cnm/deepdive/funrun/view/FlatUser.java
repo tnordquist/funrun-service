@@ -3,11 +3,10 @@ package edu.cnm.deepdive.funrun.view;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.net.URI;
-import java.util.Date;
 import org.springframework.lang.NonNull;
 
 /**
- * This interface is non-hierarchical, for one to many relationships with history and comment.
+ * Shows a non-hierarchical relation, for one to many relationships with history and comment.
  */
 @JsonPropertyOrder({"id", "displayName", "skillLevel", "Href", "role"})
 public interface FlatUser {

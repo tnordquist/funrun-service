@@ -38,7 +38,7 @@ import org.springframework.stereotype.Component;
 )
 
 /**
- * This entity class contains static methods, with convenience annotations,
+ * Contains static methods, with convenience annotations,
  * which provides additional information about user to assist Hibernate in mapping
  * an entity class field to a table column in a Apache Derby database, and retrieved.
  */
@@ -88,10 +88,9 @@ public class User implements FlatUser {
   private Role role = Role.USER;
 
   /**
-   * Getters and setters give permission to invoke methods in other classes.
+   * Returns user's id
    *
-   * @param
-   * @return text, id, displayName, role, oauthKey, skillLevel, history, comments.
+   * @return a long containing the value for Id.
    */
   public Long getId() {
     return id;
@@ -108,35 +107,69 @@ public class User implements FlatUser {
   }
 
 
+  /**
+   * Returns user's role.
+   *
+   * @return role.
+   */
   public Role getRole() {
     return role;
   }
 
+  /**
+   * Sets the user's role.
+   */
   public void setRole(Role role) {
     this.role = role;
   }
 
+  /**
+   * Returns user's oauthKey.
+   *
+   * @return oauthKey for user authentication.
+   */
   @NonNull
   public String getOauthKey() {
     return oauthKey;
   }
 
+  /**
+   * Sets the user's oauthKey for his authentication.
+   */
   public void setOauthKey(@NonNull String oauthKey) {
     this.oauthKey = oauthKey;
   }
 
+  /**
+   * Returns user's skill level.
+   *
+   * @return skill level for user.
+   */
   public int getSkillLevel() {
     return skillLevel;
   }
 
+  /**
+   * Sets the user's skill level.
+   */
   public void setSkillLevel(int skillLevel) {
     this.skillLevel = skillLevel;
   }
 
+  /**
+   * Returns a list of histories for the specific user.
+   *
+   * @return histories for user.
+   */
   public List<History> getHistories() {
     return histories;
   }
 
+  /**
+   * Returns a list of comments for the specific user.
+   *
+   * @return comments for user.
+   */
   public List<Comment> getComments() {
     return comments;
   }
@@ -155,18 +188,18 @@ public class User implements FlatUser {
   }
 
   /**
-   * URI for linked resource. Href defines a link between the current element
-   * and the destination anchor defined by this attribute
+   * Defines a link between the current element and the destination anchor defined by this
+   * attribute
    *
-   * @param
-   * @return entityLinks if id is not null, or else null
+   * @return entityLinks if id is not null, or  null
    */
   @Override
   public URI getHref() {
     return (id != null) ? entityLinks.linkForItemResource(User.class, id).toUri() : null;
   }
 
-  /** This class defines user and administrator roles for application.
+  /**
+   * Defines user and administrator roles for application.
    */
   public enum Role {
     USER, ADMINISTRATOR

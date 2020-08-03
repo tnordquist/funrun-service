@@ -6,13 +6,17 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-
+/**
+ * Handles exceptions thrown by request handling methods in the same controller.
+ */
 @RestControllerAdvice
 public class ControllerExceptionHandler {
 
-
+  /**
+   * Returns exception NOT_Found.
+   */
   @ExceptionHandler(NoSuchElementException.class)
-  @ResponseStatus(value = HttpStatus.NOT_FOUND,reason = "Resource not found")
-  public void notFound(){
+  @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Resource not found")
+  public void notFound() {
   }
 }

@@ -4,10 +4,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import edu.cnm.deepdive.funrun.model.entity.History;
 import edu.cnm.deepdive.funrun.model.entity.User;
 import java.net.URI;
-import java.util.Date;
 
 /**
- * This interface is non-hierarchical, for many to one with user and history.
+ * Shows a non-hierarchical relation, for many to one with user and history.
  */
 @JsonPropertyOrder({"id", "history", "author", "text"})
 public interface FlatComment {

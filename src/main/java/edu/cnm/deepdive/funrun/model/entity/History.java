@@ -3,7 +3,6 @@ package edu.cnm.deepdive.funrun.model.entity;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import edu.cnm.deepdive.funrun.view.FlatComment;
-import edu.cnm.deepdive.funrun.view.FlatEvent;
 import edu.cnm.deepdive.funrun.view.FlatHistory;
 import java.net.URI;
 import java.util.Date;
@@ -18,24 +17,19 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Source;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.EntityLinks;
 import org.springframework.lang.NonNull;
 
 /**
- * This entity class contains static methods, with convenience annotations,
- * which provides additional information about history to assist Hibernate in mapping
- * an entity class field to a table column in a Apache Derby database, and retrieved.
+ * Contains static methods, with convenience annotations, which provides additional information
+ * about history to assist Hibernate in mapping an entity class field to a table column in a Apache
+ * Derby database, and retrieved.
  */
 @SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
@@ -82,57 +76,100 @@ public class History implements FlatHistory {
 
 
   /**
-   * Getters and setters give permission to invoke methods in other classes.
+   * Returns history's id
    *
-   * @param
-   * @return text, id, start, end, user, event, distance, comments.
+   * @return a long containing the value for Id.
    */
-
   public Long getId() {
     return id;
   }
 
+  /**
+   * Returns history's start date.
+   *
+   * @return a start date of the history.
+   */
   public Date getStart() {
     return start;
   }
 
+  /**
+   * Sets the history's start date.
+   */
   public void setStart(Date start) {
     this.start = start;
   }
 
+  /**
+   * Returns history's end date.
+   *
+   * @return the end date for history.
+   */
   public Date getEnd() {
     return end;
   }
 
+  /**
+   * Sets the history's end date.
+   */
   public void setEnd(Date end) {
     this.end = end;
   }
 
+  /**
+   * Returns the user for that specific history.
+   *
+   * @return the user.
+   */
   public User getUser() {
     return user;
   }
 
+  /**
+   * Sets the history's user.
+   */
   public void setUser(User user) {
     this.user = user;
   }
 
+  /**
+   * Returns the event for that specific history.
+   *
+   * @return the event.
+   */
   public Event getEvent() {
     return event;
   }
 
+  /**
+   * Sets the event for the specific history.
+   */
   public void setEvent(Event event) {
     this.event = event;
   }
 
+  /**
+   * Returns the distance for that specific history.
+   *
+   * @return an int containing the value for the distance.
+   */
   public int getDistance() {
     return distance;
   }
 
+  /**
+   * Sets the distance in the specific history.
+   */
   public void setDistance(int distance) {
     this.distance = distance;
 
   }
 
+  /**
+   * Returns a list of comments for the specific history.
+   *
+   * @return comments for specific history.
+   */
   public List<Comment> getComments() {
     return comments;
   }
@@ -150,11 +187,10 @@ public class History implements FlatHistory {
   }
 
   /**
-   * URI for linked resource. Href defines a link between the current element
-   * and the destination anchor defined by this attribute
+   * Defines a link between the current element and the destination anchor defined by this
+   * attribute.
    *
-   * @param
-   * @return entityLinks if id is not null, or else null
+   * @return entityLinks if id is not null, or null
    */
   @Override
   public URI getHref() {

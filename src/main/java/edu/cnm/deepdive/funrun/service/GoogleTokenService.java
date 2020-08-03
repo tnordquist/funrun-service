@@ -27,6 +27,10 @@ import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConv
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
 import org.springframework.stereotype.Component;
 
+/**
+ * Secures exchange of the ID token or a refresh token for an access token and new refresh token.
+ * Securely calls of APIs that required the user authorization.
+ */
 @Component
 public class GoogleTokenService implements ResourceServerTokenServices {
 
@@ -38,6 +42,12 @@ public class GoogleTokenService implements ResourceServerTokenServices {
   private final AccessTokenConverter converter;
   private final UserService userService;
 
+  /**
+   * Creates an instance of GoogleTokenService class.
+   *
+   * @param clientId    the id that the client uses
+   * @param userService
+   */
   @Autowired
   public GoogleTokenService(@Value("${oauth.clientId}") String clientId,
       UserService userService) {
@@ -71,7 +81,7 @@ public class GoogleTokenService implements ResourceServerTokenServices {
           new SimpleGrantedAuthority(String.format(ROLE_PATTERN, user.getRole())));
       Authentication base = new UsernamePasswordAuthenticationToken(user, token, grants);
       OAuth2Request request = converter.extractAuthentication(payload).getOAuth2Request();
-      return new OAuth2Authentication(request,base);
+      return new OAuth2Authentication(request, base);
     } else {
       throw new InvalidTokenException(VERIFICATION_FAILURE);
     }
