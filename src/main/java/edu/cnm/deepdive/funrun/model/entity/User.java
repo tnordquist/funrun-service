@@ -29,9 +29,9 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
- * Contains static methods, with convenience annotations,
- * which provides additional information about user to assist Hibernate in mapping
- * an entity class field to a table column in a Apache Derby database, and retrieved.
+ * Contains static methods, with convenience annotations, which provides additional information
+ * about user to assist Hibernate in mapping an entity class field to a table column in a Apache
+ * Derby database, and retrieved.
  */
 @SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
@@ -67,7 +67,8 @@ public class User implements FlatUser {
   @OneToMany(                             //given name of the field.JPA annotation
       fetch = FetchType.EAGER,
       mappedBy = "user",
-      cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE},
+      cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH,
+          CascadeType.REMOVE},
       orphanRemoval = true
   )
   @OrderBy("start DESC")
@@ -77,7 +78,8 @@ public class User implements FlatUser {
   @OneToMany(
       fetch = FetchType.EAGER,
       mappedBy = "author",
-      cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE},
+      cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH,
+          CascadeType.REMOVE},
       orphanRemoval = true
   )
   @OrderBy("date DESC")
@@ -182,7 +184,6 @@ public class User implements FlatUser {
   }
 
   @Autowired
-
   private void setEntityLinks(
       @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") EntityLinks entityLinks) {
     User.entityLinks = entityLinks;

@@ -1,0 +1,5 @@
+edu.cnm.deepdive.funrun
+edu.cnm.deepdive.funrun.controller
+edu.cnm.deepdive.funrun.model.entity
+edu.cnm.deepdive.funrun.service
+edu.cnm.deepdive.funrun.view

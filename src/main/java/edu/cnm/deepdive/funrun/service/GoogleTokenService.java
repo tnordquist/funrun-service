@@ -75,7 +75,6 @@ public class GoogleTokenService implements ResourceServerTokenServices {
       Payload payload = idToken.getPayload();
       String oauthKey = payload.getSubject();
       String displayName = (String) payload.get("name");
-      //TODO Extract any additional required info from payload.
       User user = userService.readOrCreateOne(oauthKey, displayName);
       Collection<GrantedAuthority> grants = Collections.singleton(
           new SimpleGrantedAuthority(String.format(ROLE_PATTERN, user.getRole())));
