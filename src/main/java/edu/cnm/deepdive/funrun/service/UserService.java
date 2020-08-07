@@ -20,7 +20,7 @@ public class UserService {
   /**
    * Creates and instance of UserService class.
    *
-   * @param userRepository
+   * @param userRepository which give the findFirstByOauthKey
    */
   @Autowired
   public UserService(UserRepository userRepository) {
@@ -74,8 +74,8 @@ public class UserService {
   /**
    * Returns an current user based on its auth.
    *
-   * @param auth
-   * @return user
+   * @param auth that the user has
+   * @return auth for the user
    */
   public User getCurrentUser(Authentication auth) {
     return (User) auth.getPrincipal();
